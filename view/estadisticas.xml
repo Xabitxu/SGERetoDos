@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+<!-- ===================== ESTADÍSTICAS ===================== -->
+
+    <record id="view_sge_estadisticas_tree" model="ir.ui.view">
+        <field name="name">sge.estadisticas.tree</field>
+        <field name="model">sge.estadisticas</field>
+        <field name="arch" type="xml">
+            <tree decoration-danger="incidencias_finalizadas &lt; total_incidencias"
+            decoration-success="incidencias_finalizadas == total_incidencias">
+
+                <field name="fecha"/>
+                <field name="total_incidencias"/>
+                <field name="incidencias_finalizadas"/>
+                <field name="tiempo_promedio_resolucion"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_sge_estadisticas_form" model="ir.ui.view">
+        <field name="name">sge.estadisticas.form</field>
+        <field name="model">sge.estadisticas</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group string="Nombre de la estadistica">
+                    <field name="name"/>
+                    </group>
+
+                    <group string="📅 Selección de fecha">
+                    <field name="fecha"/>
+                    </group>
+
+                    <group string="📊 Estadísticas del día" col="2">
+                        <field name="total_incidencias"/>
+                        <field name="incidencias_finalizadas"/>
+                        <field name="tiempo_promedio_resolucion"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sge_estadisticas_kanban" model="ir.ui.view">
+        <field name="name">sge.estadisticas.kanban</field>
+        <field name="model">sge.estadisticas</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="fecha"/>
+                <field name="total_incidencias"/>
+                <field name="incidencias_finalizadas"/>
+                <field name="tiempo_promedio_resolucion"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <strong>📅 <t t-esc="record.fecha.value"/></strong>
+                            <div>Total: <t t-esc="record.total_incidencias.value"/></div>
+                            <div>Finalizadas: <t t-esc="record.incidencias_finalizadas.value"/></div>
+                            <div>Promedio: <t t-esc="record.tiempo_promedio_resolucion.value"/> h</div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_sge_estadisticas_search" model="ir.ui.view">
+        <field name="name">sge.estadisticas.search</field>
+        <field name="model">sge.estadisticas</field>
+        <field name="arch" type="xml">
+            <search>
+
+                <field name="fecha"/>
+                <field name="name"/>
+
+                <filter name="filter_con_incidencias"
+                        string="Con incidencias"
+                        domain="[('total_incidencias', '&gt;', 0)]"/>
+
+                <separator/>
+
+                <group expand="0" string="Group By">
+                    <filter name="group_by_fecha"
+                            string="Fecha"
+                            context="{'group_by': 'fecha'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Vista heredada de usuarios -->
+    <record id="view_project_task_form_inherit_sge_simple" model="ir.ui.view">
+    <field name="name">project.task.form.inherit.sge.simple</field>
+    <field name="model">project.task</field>
+    <field name="inherit_id" ref="project.view_task_form2"/>
+    <field name="arch" type="xml">
+        <xpath expr="//notebook" position="inside">
+            <page string="Incidencias">
+                <field name="incidencia_id" readonly="1">
+                    <tree>
+                        <field name="name" string="Título"/>
+                        <field name="description" string="Descripción"/>
+                        <field name="fecha_creacion" string="Fecha creación"/>
+                        <field name="estado" string="Estado"/>
+                        <field name="usuario_id" string="Creado por"/>
+                        <field name="tag_ids" widget="many2many_tags" string="Etiquetas"/>
+                    </tree>
+                </field>
+            </page>
+        </xpath>
+    </field>
+</record>
+</odoo>

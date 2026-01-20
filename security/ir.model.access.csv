@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_estadisticas_admin,access_estadisticas_admin,model_sge_estadisticas,Grupo2.grupo_admin,1,1,1,1
+access_estadisticas_user,access_estadisticas_user,model_sge_estadisticas,Grupo2.grupo_participante,1,0,0,0
+access_incidencia_admin,access_incidencia_admin,model_sge_incidencia,Grupo2.grupo_admin,1,1,1,1
+access_incidencia_user,access_incidencia_user,model_sge_incidencia,Grupo2.grupo_participante,1,1,1,0
+access_comentario_admin,access_comentario_admin,model_sge_comentario,Grupo2.grupo_admin,1,1,1,1
+access_comentario_user,access_comentario_user,model_sge_comentario,Grupo2.grupo_participante,1,1,1,0
+access_encuesta_admin,access_encuesta_admin,model_sge_encuesta,Grupo2.grupo_admin,1,1,1,1
+access_encuesta_user,access_encuesta_user,model_sge_encuesta,Grupo2.grupo_participante,1,1,1,0
+access_tag_admin,access_tag_admin,model_sge_tag,Grupo2.grupo_admin,1,1,1,1
+access_tag_user,access_tag_user,model_sge_tag,Grupo2.grupo_participante,1,0,0,0

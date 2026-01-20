@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Grupo Administrador de Estadísticas -->
+    <record id="grupo_admin" model="res.groups">
+        <field name="name">Administrador Estadísticas</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+    <!-- Grupo Usuario (Participante) -->
+    <record id="grupo_participante" model="res.groups">
+        <field name="name">Participante Estadísticas</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+</odoo>

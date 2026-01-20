@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Menú principal -->
+    <menuitem id="menu_sge_root"
+              name="Gestión de Incidencias"
+              sequence="10"/>
+
+    <!-- Incidencias -->
+    <record id="action_sge_incidencia" model="ir.actions.act_window">
+        <field name="name">Incidencias</field>
+        <field name="res_model">sge.incidencia</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+    <menuitem id="menu_sge_incidencia"
+              name="Incidencias"
+              parent="menu_sge_root"
+              action="action_sge_incidencia"
+              sequence="10"/>
+
+    <!-- Comentarios -->
+    <record id="action_sge_comentario" model="ir.actions.act_window">
+        <field name="name">Comentarios</field>
+        <field name="res_model">sge.comentario</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+    <menuitem id="menu_sge_comentario"
+              name="Comentarios"
+              parent="menu_sge_root"
+              action="action_sge_comentario"
+              sequence="20"/>
+
+    <!-- Encuestas -->
+    <record id="action_sge_encuesta" model="ir.actions.act_window">
+        <field name="name">Encuestas</field>
+        <field name="res_model">sge.encuesta</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+    <menuitem id="menu_sge_encuesta"
+              name="Encuestas"
+              parent="menu_sge_root"
+              action="action_sge_encuesta"
+              sequence="30"/>
+
+    <!-- Estadísticas -->
+    <record id="action_sge_estadisticas" model="ir.actions.act_window">
+        <field name="name">Estadísticas</field>
+        <field name="res_model">sge.estadisticas</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+    <menuitem id="menu_sge_estadisticas"
+              name="Estadísticas"
+              parent="menu_sge_root"
+              action="action_sge_estadisticas"
+              sequence="40"/>
+
+    <!-- Etiquetas -->
+    <record id="action_sge_tags" model="ir.actions.act_window">
+        <field name="name">Etiquetas</field>
+        <field name="res_model">sge.tag</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+    <menuitem id="menu_sge_tags"
+              name="Etiquetas"
+              parent="menu_sge_root"
+              action="action_sge_tags"
+              sequence="25"/>
+</odoo>
