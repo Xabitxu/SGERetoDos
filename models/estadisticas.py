@@ -8,11 +8,12 @@ class Estadisticas(models.Model):
     _name = 'sge.estadisticas'
     _description = 'Estadísticas de incidencias'
 
-    name = fields.Char(string='Nombre', required=True)
+    name = fields.Char(string='Nombre')
     fecha = fields.Date(string='Fecha', required=True)
     total_incidencias = fields.Integer(string='Total de incidencias', compute= 'calcularTotal', readonly=True, store=True)
     incidencias_finalizadas = fields.Integer(string='Incidencias finalizadas', compute='calcularTotal', readonly=True)
     tiempo_promedio_resolucion = fields.Float(string='Tiempo promedio de resolución (horas)', compute='calcularTotal', readonly=True)
+    proyecto = fields.Many2one(comodel_name='project.task', string= 'Tarea/Proyecto')
 
     @api.onchange('fecha')
     def _onchange_fecha_validacion(self):
@@ -36,6 +37,12 @@ class Estadisticas(models.Model):
                 raise ValidationError(
                     "No se pueden guardar estadísticas sin incidencias para ese día."
                 )
+
+    @api.model
+    def create(self, vals):
+        if not vals.get('name') and vals.get('fecha'):
+            vals['name'] = f"Estadísticas del {vals['fecha']}"
+        return super().create(vals)
 
     @api.depends('fecha')
     def calcularTotal(self):

@@ -1,4 +1,5 @@
-from odoo import models, fields
+from odoo import models, fields, api
+from odoo.exceptions import ValidationError
 
 class Incidencia(models.Model):
     _name = 'sge.incidencia'
@@ -25,4 +26,103 @@ class Incidencia(models.Model):
     # Many2many: Etiquetas
     tag_ids = fields.Many2many('sge.tag', string="Etiquetas")
 
-    proyecto = fields.Many2one('project.task', string='Tarea/Proyecto')
+    proyecto = fields.Many2one(comodel_name='project.task', string='Tarea/Proyecto')
+    
+    # VALIDACIONES USANDO DECORADORES
+    @api.onchange('name')
+    def _onchange_name_validacion(self):
+        """Validación en tiempo real del nombre"""
+        if self.name and not self.name.strip():
+            raise ValidationError('El título de la incidencia no puede estar vacío')
+    
+    @api.onchange('description')
+    def _onchange_description_validacion(self):
+        """Validación en tiempo real de la descripción"""
+        if self.description and len(self.description) > 5000:
+            raise ValidationError('La descripción no puede exceder 5000 caracteres')
+    
+    @api.constrains('name')
+    def _check_name_not_empty(self):
+        """Validación a nivel de base de datos del nombre"""
+        for record in self:
+            if not record.name or not record.name.strip():
+                raise ValidationError('El título de la incidencia no puede estar vacío')
+    
+    @api.constrains('description')
+    def _check_description_length(self):
+        """Validación a nivel de base de datos de la descripción"""
+        for record in self:
+            if record.description and len(record.description) > 5000:
+                raise ValidationError('La descripción no puede exceder 5000 caracteres')
+    
+    @api.constrains('estado')
+    def _check_estado_transitions(self):
+        """Validación de transiciones de estado"""
+        transiciones_validas = {
+            'abierta': ['en_proceso'],
+            'en_proceso': ['abierta', 'finalizada'],
+            'finalizada': ['en_proceso']
+        }
+        
+        for record in self:
+            # Al crear, siempre es válido (estado default es 'abierta')
+            if not record.id:
+                continue
+            
+            # Obtener el estado anterior del BD
+            estado_anterior = self.env['sge.incidencia'].search([('id', '=', record.id)])
+            if estado_anterior:
+                estado_anterior_val = estado_anterior[0].estado
+                estado_nuevo = record.estado
+                
+                if estado_anterior_val != estado_nuevo:
+                    if estado_nuevo not in transiciones_validas.get(estado_anterior_val, []):
+                        raise ValidationError(
+                            f'No se puede cambiar de "{estado_anterior_val}" a "{estado_nuevo}". '
+                            f'Transiciones válidas: {", ".join(transiciones_validas[estado_anterior_val])}'
+                        )
+    
+    # SOBRECARGA DE FUNCIONES
+    @api.model
+    def create(self, vals):
+        """Sobrecarga de create - Se ejecuta al crear una incidencia"""
+        # Aquí puedes agregar validaciones personalizadas
+        if 'name' in vals and not vals['name'].strip():
+            raise ValidationError('El título de la incidencia no puede estar vacío')
+        
+        if 'description' in vals and len(vals.get('description', '')) > 5000:
+            raise ValidationError('La descripción no puede exceder 5000 caracteres')
+        
+        # Llamar a la función original de create
+        return super().create(vals)
+    
+    def write(self, vals):
+        """Sobrecarga de write - Se ejecuta al modificar una incidencia"""
+        # Validaciones al modificar
+        if 'name' in vals and not vals['name'].strip():
+            raise ValidationError('El título de la incidencia no puede estar vacío')
+        
+        if 'description' in vals and len(vals.get('description', '')) > 5000:
+            raise ValidationError('La descripción no puede exceder 5000 caracteres')
+        
+        # Validar cambios de estado
+        if 'estado' in vals:
+            estado_actual = vals['estado']
+            for record in self:
+                estado_anterior = record.estado
+                
+                # No permitir cambios inválidos de estado
+                transiciones_validas = {
+                    'abierta': ['en_proceso'],
+                    'en_proceso': ['abierta', 'finalizada'],
+                    'finalizada': ['en_proceso']
+                }
+                
+                if estado_actual not in transiciones_validas.get(estado_anterior, []):
+                    raise ValidationError(
+                        f'No se puede cambiar de {estado_anterior} a {estado_actual}. '
+                        f'Transiciones válidas: {transiciones_validas[estado_anterior]}'
+                    )
+        
+        # Llamar a la función original de write
+        return super().write(vals)

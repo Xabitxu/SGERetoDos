@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<!-- ===================== INCIDENCIAS ===================== -->
+    <record id="view_sge_incidencia_tree" model="ir.ui.view">
+        <field name="name">sge.incidencia.tree</field>
+        <field name="model">sge.incidencia</field>
+        <field name="arch" type="xml">
+            <tree decoration-danger="estado == 'abierta'"
+            decoration-success="estado == 'finalizada'"
+            decoration-warning="estado == 'en_proceso'">
+                <field name="name"/>
+                <field name="fecha_creacion"/>
+                <field name="usuario_id"/>
+                <field name="estado"/>
+                <field name="tag_ids" widget="many2many_tags"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_sge_incidencia_form" model="ir.ui.view">
+        <field name="name">sge.incidencia.form</field>
+        <field name="model">sge.incidencia</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group string="📋 Información básica">
+                        <field name="name"/>
+                        <field name="estado"/>
+                    </group>
+                    <group string="📅 Fechas y usuarios" col="2">
+                        <field name="fecha_creacion"/>
+                        <field name="usuario_id"/>
+                    </group>
+                    <group string="📝 Descripción">
+                        <field name="description"/>
+                    </group>
+                    <group string="🏷️ Etiquetas">
+                        <field name="tag_ids" widget="many2many_tags"/>
+                    </group>
+                    <group string="📊 Relaciones">
+                        <field name="encuesta_id"/>
+                        <field name="proyecto"/>
+                    </group>
+                    <notebook>
+                        <page string="Comentarios">
+                            <field name="comentario_ids">
+                                <tree>
+                                    <field name="fecha" string="Fecha"/>
+                                    <field name="usuario_id" string="Usuario"/>
+                                    <field name="contenido" string="Comentario"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_sge_incidencia_kanban" model="ir.ui.view">
+        <field name="name">sge.incidencia.kanban</field>
+        <field name="model">sge.incidencia</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="estado"/>
+                <field name="fecha_creacion"/>
+                <field name="usuario_id"/>
+                <field name="tag_ids"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <strong><t t-esc="record.name.value"/></strong>
+                            <div>Estado: <t t-esc="record.estado.value"/></div>
+                            <div>📅 <t t-esc="record.fecha_creacion.value"/></div>
+                            <div>👤 <t t-esc="record.usuario_id.value"/></div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <record id="view_sge_incidencia_search" model="ir.ui.view">
+        <field name="name">sge.incidencia.search</field>
+        <field name="model">sge.incidencia</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="estado"/>
+                <field name="usuario_id"/>
+                <filter name="filter_abiertas"
+                        string="Abiertas"
+                        domain="[('estado', '=', 'abierta')]"/>
+                <filter name="filter_en_proceso"
+                        string="En proceso"
+                        domain="[('estado', '=', 'en_proceso')]"/>
+                <filter name="filter_finalizadas"
+                        string="Finalizadas"
+                        domain="[('estado', '=', 'finalizada')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_estado"
+                            string="Estado"
+                            context="{'group_by': 'estado'}"/>
+                    <filter name="group_by_usuario"
+                            string="Usuario"
+                            context="{'group_by': 'usuario_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<!-- =================== COMENTARIOS ===================== -->
+    <record id="view_sge_comentario_tree" model="ir.ui.view">
+        <field name="name">sge.comentario.tree</field>
+        <field name="model">sge.comentario</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="fecha"/>
+                <field name="usuario_id"/>
+                <field name="incidencia_id"/>
+                <field name="contenido"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_sge_comentario_form" model="ir.ui.view">
+        <field name="name">sge.comentario.form</field>
+        <field name="model">sge.comentario</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group string="💬 Comentario">
+                        <field name="contenido"/>
+                    </group>
+                    <group string="📅 Información">
+                        <field name="fecha"/>
+                        <field name="usuario_id"/>
+                        <field name="incidencia_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_sge_comentario_kanban" model="ir.ui.view">
+        <field name="name">sge.comentario.kanban</field>
+        <field name="model">sge.comentario</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="fecha"/>
+                <field name="usuario_id"/>
+                <field name="incidencia_id"/>
+                <field name="contenido"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <strong>📅 <t t-esc="record.fecha.value"/></strong>
+                            <div>Usuario: <t t-esc="record.usuario_id.value"/></div>
+                            <div>Incidencia: <t t-esc="record.incidencia_id.value"/></div>
+                            <div><t t-esc="record.contenido.value"/></div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <record id="view_sge_comentario_search" model="ir.ui.view">
+        <field name="name">sge.comentario.search</field>
+        <field name="model">sge.comentario</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="fecha"/>
+                <field name="usuario_id"/>
+                <field name="incidencia_id"/>
+                <field name="contenido"/>
+                <filter name="filter_ultimos_dias"
+                        string="Últimos 7 días"
+                        domain="[('fecha', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_fecha"
+                            string="Fecha"
+                           context="{'group_by': 'fecha'}"/>
+                    <filter name="group_by_usuario"
+                            string="Usuario"
+                            context="{'group_by': 'usuario_id'}"/>
+                    <filter name="group_by_incidencia"
+                            string="Incidencia"
+                            context="{'group_by': 'incidencia_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>
