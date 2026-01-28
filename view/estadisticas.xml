@@ -100,7 +100,7 @@
     <field name="arch" type="xml">
         <xpath expr="//notebook" position="inside">
             <page string="Estadísticas">
-                <field name="estadistica_id">
+                <field name="estadistica_id" readonly="1">
                     <tree>
                         <field name="name" string="Nombre" width="200px"/>
                         <field name="fecha" string="Fecha"/>
