@@ -108,4 +108,26 @@
         </field>
     </record>
 
+<!-- Vista heredada de usuarios -->
+    <record id="view_project_task_form_inherit_sge_simple" model="ir.ui.view">
+    <field name="name">Incidencias</field>
+    <field name="model">project.task</field>
+    <field name="inherit_id" ref="project.view_task_form2"/>
+    <field name="arch" type="xml">
+        <xpath expr="//notebook" position="inside">
+            <page string="Incidencias">
+                <field name="incidencia_id" readonly="1">
+                    <tree>
+                        <field name="name" string="Título"/>
+                        <field name="description" string="Descripción"/>
+                        <field name="fecha_creacion" string="Fecha creación"/>
+                        <field name="estado" string="Estado"/>
+                        <field name="usuario_id" string="Creado por"/>
+                        <field name="tag_ids" widget="many2many_tags" string="Etiquetas"/>
+                    </tree>
+                </field>
+            </page>
+        </xpath>
+    </field>
+</record>
 </odoo>

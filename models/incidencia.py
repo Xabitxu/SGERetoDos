@@ -5,8 +5,8 @@ class Incidencia(models.Model):
     _name = 'sge.incidencia'
     _description = 'Gestión de Incidencias'
 
-    name = fields.Char(string='Título', required=True)
-    description = fields.Text(string='Descripción')
+    name = fields.Char(string='Título')
+    description = fields.Text(string='Descripción',required=True)
     fecha_creacion = fields.Datetime(string='Fecha de creación', default=fields.Datetime.now)
     estado = fields.Selection([
         ('abierta', 'Abierta'),
