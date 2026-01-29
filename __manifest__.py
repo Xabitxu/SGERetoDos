@@ -14,6 +14,7 @@
         'view/incidencias.xml',
         'view/estadisticas.xml',
         'view/comentarios.xml',
+        'view/encuesta.xml',
     ],
     'installable': True,
     'application': True,

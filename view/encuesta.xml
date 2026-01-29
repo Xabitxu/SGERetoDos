@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_sge_encuesta_form" model="ir.ui.view">
+        <field name="name">sge.encuesta.form</field>
+        <field name="model">sge.encuesta</field>
+        <field name="arch" type="xml">
+            <form string="📋 Encuesta">
+                <header>
+                    <button name="action_completar" type="object" string="✅ Completar" class="btn-primary" attrs="{'invisible': [('estado', '=', 'completada')]}"/>
+                    <button name="action_borrador" type="object" string="📝 Borrador" class="btn-secondary" attrs="{'invisible': [('estado', '=', 'borrador')]}"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="task_id"/>
+                            <field name="incidencia_id"/>
+                            <field name="fecha"/>
+                        </group>
+                        <group>
+                            <field name="puntuacion" widget="radio"/>
+                            <field name="estado" widget="statusbar" statusbar_visible="borrador,completada"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="📝 Observaciones">
+                            <field name="observaciones" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sge_encuesta_tree" model="ir.ui.view">
+        <field name="name">sge.encuesta.tree</field>
+        <field name="model">sge.encuesta</field>
+        <field name="arch" type="xml">
+            <tree string="📋 Encuestas">
+                <field name="name" string="Título"/>
+                <field name="task_id" string="Tarea"/>
+                <field name="incidencia_id" string="Incidencia"/>
+                <field name="puntuacion" string="Puntuación"/>
+                <field name="fecha" string="Fecha"/>
+                <field name="estado" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_project_task_form_inherit_encuestas" model="ir.ui.view">
+        <field name="name">project.task.form.inherit.encuestas</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="📊 Encuestas">
+                    <field name="encuesta_id">
+                        <tree string="Encuestas">
+                            <field name="name" string="Título"/>
+                            <field name="incidencia_id" string="Incidencia"/>
+                            <field name="puntuacion" string="Puntuación"/>
+                            <field name="fecha" string="Fecha"/>
+                            <field name="estado" widget="badge"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
