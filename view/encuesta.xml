@@ -30,6 +30,16 @@
                         <page string="📝 Observaciones">
                             <field name="observaciones" nolabel="1"/>
                         </page>
+                        <page string="Imágenes">
+                            <group>
+                                <group string="Imagen principal">
+                                    <field name="imagen_adjunta" widget="image"
+                                           class="oe_avatar"
+                                           options="{'preview_image': 'imagen_adjunta', 'size': [90, 90]}"/>
+                                    <field name="nombre_imagen" placeholder="Nombre de la imagen"/>
+                                </group>
+                            </group>
+                         </page>
                     </notebook>
                 </sheet>
             </form>
@@ -51,13 +61,49 @@
         </field>
     </record>
 
+    <record id="view_sge_encuesta_kanban" model="ir.ui.view">
+        <field name="name">sge.encuesta.kanban</field>
+        <field name="model">sge.encuesta</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="estado"/>
+                <field name="fecha"/>
+                <field name="puntuacion"/>
+                <field name="incidencia_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <strong><t t-esc="record.name.value"/></strong>
+                            <div>Estado: <t t-esc="record.estado.value"/></div>
+                            <div>
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                            <t t-esc="record.fecha.value"/>
+                        </div>
+                            <div>
+                                <t t-if="record.puntuacion.value == '1'">😠</t>
+                                <t t-elif="record.puntuacion.value == '2'">😕</t>
+                                <t t-elif="record.puntuacion.value == '3'">😐</t>
+                                <t t-elif="record.puntuacion.value == '4'">😊</t>
+                                <t t-elif="record.puntuacion.value == '5'">😄</t>
+                                <t t-else=""></t>
+                                Puntuación: <t t-esc="record.puntuacion.value"/>
+                            </div>
+                            <div>Incidencia: <t t-esc="record.incidencia_id.value"/></div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
     <record id="view_project_task_form_inherit_encuestas" model="ir.ui.view">
         <field name="name">project.task.form.inherit.encuestas</field>
         <field name="model">project.task</field>
         <field name="inherit_id" ref="project.view_task_form2"/>
         <field name="arch" type="xml">
             <xpath expr="//notebook" position="inside">
-                <page string="📊 Encuestas">
+                <page string="Encuestas">
                     <field name="encuesta_id">
                         <tree string="Encuestas">
                             <field name="name" string="Título"/>

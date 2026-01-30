@@ -1,4 +1,5 @@
-from odoo import models, fields
+from odoo import models, fields,  api
+from odoo.exceptions import ValidationError
 
 class Encuesta(models.Model):
     _name = 'sge.encuesta'
@@ -50,6 +51,25 @@ class Encuesta(models.Model):
         ('completada', '✅ Completada')
     ], string='Estado', default='borrador')
 
+
+    @api.constrains('name')
+    def _check_name(self):
+        for record in self:
+            if not record.name or not record.name.strip():
+                raise ValidationError("El título de la encuesta es obligatorio")
+            if len(record.name.strip()) < 3:
+                raise ValidationError("El título debe tener al menos 3 caracteres")
+    @api.constrains('incidencia_id')
+    def _check_incidencia(self):
+        for record in self:
+            if not record.incidencia_id:
+                raise ValidationError("Debe seleccionar una incidencia asociada")
+    @api.constrains('task_id')
+    def _check_task_id(self):
+        for record in self:
+            if not record.task_id:
+                raise ValidationError("Debe seleccionar una tarea asociada")
+
     def _compute_emoticono(self):
         emoticonos = {
             '1': '😠',
@@ -66,3 +86,26 @@ class Encuesta(models.Model):
 
     def action_borrador(self):
         self.estado = 'borrador'
+
+    imagen_adjunta = fields.Binary(
+        string='Imagen Adjunta',
+        help='Adjunta una imagen relacionada con la encuesta'
+    )
+
+    nombre_imagen = fields.Char(
+        string='Nombre de la imagen',
+        help='Nombre del archivo de imagen'
+    )
+
+    def copy(self, default=None):
+        if default is None:
+            default = {}
+
+        if 'name' not in default:
+            original_name = self.name or 'Encuesta'
+            default['name'] = f"copy_of_{original_name}"
+
+        if 'estado' not in default:
+            default['estado'] = 'borrador'
+
+        return super(Encuesta, self).copy(default)
