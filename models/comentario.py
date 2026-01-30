@@ -71,3 +71,14 @@ class Comentario(models.Model):
         
         # Llamar a la función original
         return super().write(vals)
+    
+    def copy(self, default=None):
+        """Sobrecarga de copy - Agrega 'copy_of_' al contenido al duplicar"""
+        if default is None:
+            default = {}
+        
+        if 'contenido' not in default:
+            original_contenido = self.contenido or 'Comentario'
+            default['contenido'] = f"copy_of_{original_contenido}"
+        
+        return super(Comentario, self).copy(default)

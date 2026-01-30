@@ -104,7 +104,7 @@
         <field name="arch" type="xml">
             <xpath expr="//notebook" position="inside">
                 <page string="Encuestas">
-                    <field name="encuesta_id">
+                    <field name="encuesta_id" readonly="1">
                         <tree string="Encuestas">
                             <field name="name" string="Título"/>
                             <field name="incidencia_id" string="Incidencia"/>

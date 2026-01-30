@@ -16,16 +16,21 @@
             </tree>
         </field>
     </record>
-    <record id="view_sge_incidencia_form" model="ir.ui.view">
-        <field name="name">sge.incidencia.form</field>
-        <field name="model">sge.incidencia</field>
-        <field name="arch" type="xml">
-            <form>
-                <sheet>
-                    <group string="📋 Información básica">
-                        <field name="name"/>
-                        <field name="estado"/>
-                    </group>
+     <record id="view_sge_incidencia_form" model="ir.ui.view">
+         <field name="name">sge.incidencia.form</field>
+         <field name="model">sge.incidencia</field>
+         <field name="arch" type="xml">
+             <form>
+                 <header>
+                     <button name="action_abierta" type="object" string="🔓 Abierta" class="btn-secondary" attrs="{'invisible': [('estado', '=', 'abierta')]}"/>
+                     <button name="action_en_proceso" type="object" string="⏳ En proceso" class="btn-warning" attrs="{'invisible': [('estado', '=', 'en_proceso')]}"/>
+                     <button name="action_finalizada" type="object" string="✅ Finalizada" class="btn-success" attrs="{'invisible': [('estado', '=', 'finalizada')]}"/>
+                 </header>
+                 <sheet>
+                     <group string="📋 Información básica">
+                         <field name="name"/>
+                         <field name="estado" widget="statusbar" statusbar_visible="abierta,en_proceso,finalizada"/>
+                     </group>
                     <group string="📅 Fechas y usuarios" col="2">
                         <field name="fecha_creacion"/>
                         <field name="usuario_id"/>

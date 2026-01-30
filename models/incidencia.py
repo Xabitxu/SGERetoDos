@@ -126,3 +126,29 @@ class Incidencia(models.Model):
         
         # Llamar a la función original de write
         return super().write(vals)
+    
+    def copy(self, default=None):
+        """Sobrecarga de copy - Agrega 'copy_of_' al nombre al duplicar"""
+        if default is None:
+            default = {}
+        
+        if 'name' not in default:
+            original_name = self.name or 'Incidencia'
+            default['name'] = f"copy_of_{original_name}"
+        
+        if 'estado' not in default:
+            default['estado'] = 'abierta'
+        
+        return super(Incidencia, self).copy(default)
+    
+    def action_abierta(self):
+        """Cambiar estado a abierta"""
+        self.estado = 'abierta'
+    
+    def action_en_proceso(self):
+        """Cambiar estado a en_proceso"""
+        self.estado = 'en_proceso'
+    
+    def action_finalizada(self):
+        """Cambiar estado a finalizada"""
+        self.estado = 'finalizada'

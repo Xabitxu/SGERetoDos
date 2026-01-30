@@ -1,7 +1,6 @@
 from odoo import models, fields, api
 from datetime import date
-from odoo.exceptions import UserError
-from stdnum.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 
 
 class Estadisticas(models.Model):
@@ -77,3 +76,14 @@ class Estadisticas(models.Model):
                 record.tiempo_promedio_resolucion = finalizadas_total / total
             else:
                 record.tiempo_promedio_resolucion = 0
+    
+    def copy(self, default=None):
+        """Sobrecarga de copy - Agrega 'copy_of_' al nombre al duplicar"""
+        if default is None:
+            default = {}
+        
+        if 'name' not in default:
+            original_name = self.name or 'Estadísticas'
+            default['name'] = f"copy_of_{original_name}"
+        
+        return super(Estadisticas, self).copy(default)
