@@ -18,5 +18,6 @@
     ],
     'installable': True,
     'application': True,
+    'icon': 'Grupo2/static/description/icon.png',
 }
 
